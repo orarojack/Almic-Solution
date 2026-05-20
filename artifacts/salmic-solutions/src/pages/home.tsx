@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
-import { ArrowRight, Activity, Shield, Zap, Cpu, Smartphone, Brain, ChevronRight, Users } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
+import { ArrowRight, Activity, Zap, Cpu, Smartphone, Brain, ChevronRight, Users, X, Menu, Star, Search, Lightbulb, Rocket, HeartHandshake } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 import heroBg from "@/assets/images/hero-bg.png";
@@ -15,100 +15,248 @@ const fadeInUp = {
 
 const staggerContainer = {
   hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.2
-    }
-  }
+  visible: { opacity: 1, transition: { staggerChildren: 0.2 } }
 };
+
+function useCountUp(target: number, duration = 1800, startOnView = true) {
+  const [count, setCount] = useState(0);
+  const [hasStarted, setHasStarted] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!startOnView) return;
+    const el = ref.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) setHasStarted(true); },
+      { threshold: 0.5 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [startOnView]);
+
+  useEffect(() => {
+    if (!hasStarted) return;
+    let start = 0;
+    const step = target / (duration / 16);
+    const timer = setInterval(() => {
+      start += step;
+      if (start >= target) { setCount(target); clearInterval(timer); }
+      else setCount(Math.floor(start));
+    }, 16);
+    return () => clearInterval(timer);
+  }, [hasStarted, target, duration]);
+
+  return { count, ref };
+}
+
+const stats = [
+  { end: 150, suffix: "+", label: "Projects Delivered" },
+  { end: 98, suffix: "%", label: "Client Satisfaction" },
+  { end: 12, suffix: "+", label: "Years of Expertise" },
+  { end: 24, suffix: "/7", label: "Ongoing Support" },
+];
+
+function StatItem({ stat, index }: { stat: typeof stats[0]; index: number }) {
+  const { count, ref } = useCountUp(stat.end);
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ delay: index * 0.1, duration: 0.5 }}
+      className="text-center px-4"
+    >
+      <div className="font-heading text-3xl md:text-4xl font-bold text-white mb-2">
+        {count}{stat.suffix}
+      </div>
+      <div className="text-sm text-primary tracking-wider uppercase font-medium">{stat.label}</div>
+    </motion.div>
+  );
+}
+
+const techStack = [
+  { name: "OpenAI" },
+  { name: "React" },
+  { name: "Node.js" },
+  { name: "React Native" },
+  { name: "Python" },
+  { name: "TensorFlow" },
+  { name: "AWS" },
+  { name: "TypeScript" },
+  { name: "Flutter" },
+  { name: "PostgreSQL" },
+];
+
+const processSteps = [
+  { step: "01", title: "Discover", icon: Search, desc: "We start by understanding your business — your goals, challenges, users, and competitive landscape." },
+  { step: "02", title: "Strategise", icon: Lightbulb, desc: "We design a clear roadmap with the right technology choices, priorities, and measurable outcomes." },
+  { step: "03", title: "Build", icon: Rocket, desc: "Our team delivers your solution in focused sprints with full transparency at every milestone." },
+  { step: "04", title: "Support", icon: HeartHandshake, desc: "Post-launch, we stay close — iterating, optimising, and scaling alongside your business." },
+];
+
+const testimonials = [
+  {
+    quote: "Salmic Solutions transformed how we use data. Their AI consultancy work gave us insights we hadn't imagined possible, and the implementation was seamless.",
+    name: "Rachel O.",
+    role: "Head of Operations, FinServ Group",
+    stars: 5,
+  },
+  {
+    quote: "The mobile app they built for us exceeded expectations. Clean, fast, and delivered on time. Our users love it and our download ratings speak for themselves.",
+    name: "James T.",
+    role: "Founder, RetailEdge",
+    stars: 5,
+  },
+  {
+    quote: "Their consultancy team quickly identified the bottlenecks we'd been wrestling with for months. Practical, decisive, and genuinely invested in our success.",
+    name: "Amara D.",
+    role: "CEO, LogiStream",
+    stars: 5,
+  },
+];
 
 export default function Home() {
   const [scrolled, setScrolled] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
   const { scrollYProgress } = useScroll();
   const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
-  
+
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
-    };
+    const handleScroll = () => setScrolled(window.scrollY > 50);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  useEffect(() => {
+    if (mobileOpen) document.body.style.overflow = "hidden";
+    else document.body.style.overflow = "";
+    return () => { document.body.style.overflow = ""; };
+  }, [mobileOpen]);
+
+  const navLinks = [
+    { label: "Services", href: "#services" },
+    { label: "How It Works", href: "#process" },
+    { label: "Why Us", href: "#expertise" },
+    { label: "Contact", href: "#cta" },
+  ];
+
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden selection:bg-primary/30 selection:text-primary">
-      
+
       {/* Navbar */}
       <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b border-transparent ${
-        scrolled ? "bg-background/80 backdrop-blur-md border-border py-4 shadow-lg shadow-black/50" : "bg-transparent py-6"
+        scrolled ? "bg-background/90 backdrop-blur-md border-border py-2 shadow-lg shadow-black/50" : "bg-transparent py-4"
       }`}>
         <div className="container mx-auto px-6 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            {/* The logo has a gray background, mix-blend-screen with dark background makes it pop */}
-            <img 
-              src="/salmic-logo.png" 
-              alt="Salmic Solutions" 
-              className="h-20 object-contain mix-blend-lighten contrast-125"
-            />
-          </div>
+          <img
+            src="/salmic-logo.png"
+            alt="Salmic Solutions"
+            className="h-20 object-contain mix-blend-lighten contrast-125"
+          />
           <div className="hidden md:flex items-center gap-8 text-sm font-medium tracking-wide">
-            <a href="#services" className="hover:text-primary transition-colors">Services</a>
-            <a href="#expertise" className="hover:text-primary transition-colors">Why Us</a>
-            <a href="#cta" className="hover:text-primary transition-colors">Contact</a>
+            {navLinks.map(link => (
+              <a key={link.label} href={link.href} className="hover:text-primary transition-colors">{link.label}</a>
+            ))}
             <Button variant="outline" className="border-primary/50 text-primary hover:bg-primary hover:text-primary-foreground transition-all rounded-sm font-heading tracking-wider">
               Get a Quote <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           </div>
+          <button
+            data-testid="button-mobile-menu"
+            className="md:hidden text-foreground hover:text-primary transition-colors p-2"
+            onClick={() => setMobileOpen(true)}
+            aria-label="Open menu"
+          >
+            <Menu className="h-6 w-6" />
+          </button>
         </div>
       </nav>
 
+      {/* Mobile Menu */}
+      <AnimatePresence>
+        {mobileOpen && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-black/70 backdrop-blur-sm z-40"
+              onClick={() => setMobileOpen(false)}
+            />
+            <motion.div
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+              transition={{ type: "tween", duration: 0.3 }}
+              className="fixed top-0 right-0 bottom-0 w-72 bg-card border-l border-border z-50 flex flex-col p-8"
+            >
+              <div className="flex justify-between items-center mb-10">
+                <img src="/salmic-logo.png" alt="Salmic Solutions" className="h-12 object-contain mix-blend-lighten contrast-125" />
+                <button
+                  data-testid="button-close-menu"
+                  onClick={() => setMobileOpen(false)}
+                  className="text-muted-foreground hover:text-white transition-colors"
+                  aria-label="Close menu"
+                >
+                  <X className="h-6 w-6" />
+                </button>
+              </div>
+              <nav className="flex flex-col gap-6">
+                {navLinks.map(link => (
+                  <a
+                    key={link.label}
+                    href={link.href}
+                    onClick={() => setMobileOpen(false)}
+                    className="font-heading text-xl text-foreground hover:text-primary transition-colors tracking-wide"
+                  >
+                    {link.label}
+                  </a>
+                ))}
+              </nav>
+              <div className="mt-auto">
+                <Button className="w-full bg-primary text-primary-foreground rounded-sm font-heading tracking-widest uppercase" onClick={() => setMobileOpen(false)}>
+                  Get a Quote <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+
       {/* Hero Section */}
       <section className="relative min-h-[100dvh] flex items-center pt-20 overflow-hidden">
-        {/* Background Image with Parallax */}
-        <motion.div 
-          style={{ y }}
-          className="absolute inset-0 z-0"
-        >
-          <img 
-            src={heroBg} 
-            alt="Circuit Background" 
-            className="w-full h-full object-cover opacity-30 mix-blend-screen"
-          />
-          {/* Gradients */}
+        <motion.div style={{ y }} className="absolute inset-0 z-0">
+          <img src={heroBg} alt="Circuit Background" className="w-full h-full object-cover opacity-30 mix-blend-screen" />
           <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent" />
           <div className="absolute inset-0 bg-gradient-to-r from-background via-background/50 to-transparent" />
         </motion.div>
 
-        {/* Content */}
         <div className="container mx-auto px-6 relative z-10">
           <div className="max-w-4xl">
-            <motion.div
-              initial="hidden"
-              animate="visible"
-              variants={staggerContainer}
-            >
+            <motion.div initial="hidden" animate="visible" variants={staggerContainer}>
               <motion.div variants={fadeInUp} className="flex items-center gap-3 mb-6">
-                <div className="h-px w-10 bg-accent"></div>
+                <div className="h-px w-10 bg-accent" />
                 <span className="text-accent font-heading font-semibold tracking-widest text-sm uppercase">Strategy. Technology. Growth.</span>
               </motion.div>
-              
+
               <motion.h1 variants={fadeInUp} className="font-heading text-5xl md:text-7xl lg:text-8xl font-bold leading-[1.1] mb-8 text-white">
                 Smart Solutions <br />
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-400">Powered by AI.</span> <br />
                 Built for You.
               </motion.h1>
-              
+
               <motion.p variants={fadeInUp} className="text-lg md:text-xl text-muted-foreground max-w-2xl mb-12 leading-relaxed font-light">
                 Salmic Solutions delivers expert consultancy, cutting-edge AI services, and bespoke mobile app development — helping businesses move faster, think smarter, and scale further.
               </motion.p>
-              
+
               <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row gap-4">
-                <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 h-14 px-8 rounded-sm font-heading tracking-widest uppercase text-sm group">
+                <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 h-14 px-8 rounded-sm font-heading tracking-widest uppercase text-sm group" data-testid="button-start-project">
                   Start a Project
                   <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
                 </Button>
-                <Button size="lg" variant="outline" className="border-border text-foreground hover:bg-white/5 h-14 px-8 rounded-sm font-heading tracking-widest uppercase text-sm">
+                <Button size="lg" variant="outline" className="border-border text-foreground hover:bg-white/5 h-14 px-8 rounded-sm font-heading tracking-widest uppercase text-sm" data-testid="button-explore-services">
                   Explore Services
                 </Button>
               </motion.div>
@@ -116,31 +264,15 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Glowing orb effect */}
         <div className="absolute top-1/2 right-0 -translate-y-1/2 translate-x-1/3 w-[800px] h-[800px] bg-primary/20 rounded-full blur-[150px] pointer-events-none" />
       </section>
 
-      {/* Stats Ticker */}
+      {/* Stats — Animated Counters */}
       <section className="border-y border-border/50 bg-card/30 backdrop-blur-sm relative z-20">
         <div className="container mx-auto px-6 py-12">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-4 divide-x divide-border/0 md:divide-border/50">
-            {[
-              { value: "150+", label: "Projects Delivered" },
-              { value: "98%", label: "Client Satisfaction" },
-              { value: "12+", label: "Years of Expertise" },
-              { value: "24/7", label: "Ongoing Support" }
-            ].map((stat, i) => (
-              <motion.div 
-                key={i}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1, duration: 0.5 }}
-                className="text-center px-4"
-              >
-                <div className="font-heading text-3xl md:text-4xl font-bold text-white mb-2">{stat.value}</div>
-                <div className="text-sm text-primary tracking-wider uppercase font-medium">{stat.label}</div>
-              </motion.div>
+            {stats.map((stat, i) => (
+              <StatItem key={i} stat={stat} index={i} />
             ))}
           </div>
         </div>
@@ -149,7 +281,7 @@ export default function Home() {
       {/* Services Section */}
       <section id="services" className="py-32 relative">
         <div className="container mx-auto px-6">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -157,7 +289,7 @@ export default function Home() {
           >
             <div>
               <h2 className="font-heading text-4xl md:text-5xl font-bold text-white mb-4">Core Capabilities</h2>
-              <p className="text-muted-foreground max-w-xl text-lg">Engineered for resilience. Designed for velocity. Our capabilities cover the entire spectrum of modern technical infrastructure.</p>
+              <p className="text-muted-foreground max-w-xl text-lg">Strategy to execution — our services cover every dimension of modern business transformation.</p>
             </div>
             <Button variant="link" className="text-accent hover:text-accent/80 font-heading tracking-widest uppercase p-0 group">
               View All Services <ChevronRight className="ml-1 h-4 w-4 group-hover:translate-x-1 transition-transform" />
@@ -166,24 +298,9 @@ export default function Home() {
 
           <div className="grid md:grid-cols-3 gap-8">
             {[
-              {
-                title: "Business Consultancy",
-                desc: "Strategic guidance to help your business identify opportunities, streamline operations, and make confident, data-driven decisions.",
-                img: serviceCloud,
-                icon: Users
-              },
-              {
-                title: "AI Services",
-                desc: "Custom AI solutions — from intelligent automation and predictive analytics to LLM-powered products that give your business a real edge.",
-                img: serviceEngineering,
-                icon: Brain
-              },
-              {
-                title: "Mobile App Development",
-                desc: "Polished, high-performance mobile applications for iOS and Android, crafted from concept to deployment with your users in mind.",
-                img: serviceSecurity,
-                icon: Smartphone
-              }
+              { title: "Business Consultancy", desc: "Strategic guidance to help your business identify opportunities, streamline operations, and make confident, data-driven decisions.", img: serviceCloud, icon: Users },
+              { title: "AI Services", desc: "Custom AI solutions — from intelligent automation and predictive analytics to LLM-powered products that give your business a real edge.", img: serviceEngineering, icon: Brain },
+              { title: "Mobile App Development", desc: "Polished, high-performance mobile applications for iOS and Android, crafted from concept to deployment with your users in mind.", img: serviceSecurity, icon: Smartphone },
             ].map((service, i) => (
               <motion.div
                 key={i}
@@ -192,14 +309,11 @@ export default function Home() {
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.2 }}
                 className="group border border-border bg-card rounded-sm overflow-hidden hover:border-primary/50 transition-colors duration-500"
+                data-testid={`card-service-${i}`}
               >
                 <div className="relative h-64 overflow-hidden">
                   <div className="absolute inset-0 bg-background/20 group-hover:bg-transparent transition-colors duration-500 z-10" />
-                  <img 
-                    src={service.img} 
-                    alt={service.title} 
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
-                  />
+                  <img src={service.img} alt={service.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" />
                   <div className="absolute top-4 left-4 z-20 bg-background/80 backdrop-blur border border-border p-3 rounded-sm">
                     <service.icon className="h-6 w-6 text-primary" />
                   </div>
@@ -207,8 +321,8 @@ export default function Home() {
                 <div className="p-8">
                   <h3 className="font-heading text-2xl font-bold text-white mb-3">{service.title}</h3>
                   <p className="text-muted-foreground leading-relaxed mb-6">{service.desc}</p>
-                  <a href="#" className="inline-flex items-center text-sm font-heading tracking-widest text-primary uppercase hover:text-white transition-colors group/link">
-                    Explore Node <ArrowRight className="ml-2 h-4 w-4 group-hover/link:translate-x-1 transition-transform" />
+                  <a href="#cta" className="inline-flex items-center text-sm font-heading tracking-widest text-primary uppercase hover:text-white transition-colors group/link">
+                    Get Started <ArrowRight className="ml-2 h-4 w-4 group-hover/link:translate-x-1 transition-transform" />
                   </a>
                 </div>
               </motion.div>
@@ -217,20 +331,84 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Expertise / Features Section */}
-      <section id="expertise" className="py-32 bg-secondary/30 border-y border-border">
+      {/* How We Work */}
+      <section id="process" className="py-32 bg-secondary/30 border-y border-border relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-accent/5 pointer-events-none" />
+        <div className="container mx-auto px-6 relative z-10">
+          <div className="max-w-3xl mx-auto text-center mb-20">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="flex items-center justify-center gap-3 mb-4"
+            >
+              <div className="h-px w-10 bg-accent" />
+              <span className="text-accent font-heading font-semibold tracking-widest text-sm uppercase">Our Process</span>
+              <div className="h-px w-10 bg-accent" />
+            </motion.div>
+            <motion.h2
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.1 }}
+              className="font-heading text-4xl md:text-5xl font-bold text-white mb-6"
+            >
+              How We Work
+            </motion.h2>
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2 }}
+              className="text-muted-foreground text-lg"
+            >
+              A structured, transparent process designed to deliver results you can rely on — every time.
+            </motion.p>
+          </div>
+
+          <div className="grid md:grid-cols-4 gap-6 relative">
+            {/* Connecting line */}
+            <div className="hidden md:block absolute top-16 left-[12.5%] right-[12.5%] h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
+
+            {processSteps.map((step, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.15 }}
+                className="relative flex flex-col items-center text-center"
+                data-testid={`card-process-${i}`}
+              >
+                <div className="relative mb-6">
+                  <div className="w-14 h-14 rounded-full bg-primary/10 border-2 border-primary/40 flex items-center justify-center group-hover:border-primary transition-colors z-10 relative">
+                    <step.icon className="h-6 w-6 text-primary" />
+                  </div>
+                  <span className="absolute -top-2 -right-2 font-heading text-xs font-bold text-accent bg-background border border-accent/30 rounded-full w-6 h-6 flex items-center justify-center">
+                    {i + 1}
+                  </span>
+                </div>
+                <h3 className="font-heading text-xl font-bold text-white mb-3">{step.title}</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed max-w-xs">{step.desc}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Why Us */}
+      <section id="expertise" className="py-32">
         <div className="container mx-auto px-6">
           <div className="max-w-3xl mx-auto text-center mb-20">
             <h2 className="font-heading text-4xl md:text-5xl font-bold text-white mb-6">Why Choose Salmic Solutions</h2>
             <p className="text-muted-foreground text-lg">We partner with businesses at every stage — from early-stage startups to established enterprises — delivering solutions that are practical, scalable, and built to last.</p>
           </div>
-
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
               { title: "Strategic Insight", icon: Zap, desc: "We analyse your business deeply before recommending a path, ensuring every solution aligns with your goals." },
               { title: "AI-First Thinking", icon: Brain, desc: "Artificial intelligence is embedded into our approach — not bolted on — so you benefit from smarter outputs at every stage." },
               { title: "End-to-End Delivery", icon: Cpu, desc: "From scoping and design through to launch and support, we stay with you for the full journey." },
-              { title: "Dedicated Support", icon: Activity, desc: "Our team is always reachable. Post-launch care, iterations, and ongoing improvements are built into our process." }
+              { title: "Dedicated Support", icon: Activity, desc: "Our team is always reachable. Post-launch care, iterations, and ongoing improvements are built into our process." },
             ].map((feature, i) => (
               <motion.div
                 key={i}
@@ -238,7 +416,7 @@ export default function Home() {
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
-                className="bg-card border border-border p-8 rounded-sm hover:bg-card/80 transition-colors"
+                className="bg-card border border-border p-8 rounded-sm hover:border-primary/40 hover:bg-card/80 transition-all duration-300"
               >
                 <div className="h-12 w-12 bg-primary/10 text-primary rounded-sm flex items-center justify-center mb-6 border border-primary/20">
                   <feature.icon className="h-6 w-6" />
@@ -251,12 +429,95 @@ export default function Home() {
         </div>
       </section>
 
-      {/* CTA Section */}
+      {/* Testimonials */}
+      <section className="py-32 bg-secondary/30 border-y border-border">
+        <div className="container mx-auto px-6">
+          <div className="max-w-3xl mx-auto text-center mb-20">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="flex items-center justify-center gap-3 mb-4"
+            >
+              <div className="h-px w-10 bg-accent" />
+              <span className="text-accent font-heading font-semibold tracking-widest text-sm uppercase">Client Stories</span>
+              <div className="h-px w-10 bg-accent" />
+            </motion.div>
+            <motion.h2
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.1 }}
+              className="font-heading text-4xl md:text-5xl font-bold text-white"
+            >
+              Trusted by Businesses
+            </motion.h2>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            {testimonials.map((t, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.15 }}
+                className="bg-card border border-border rounded-sm p-8 flex flex-col hover:border-primary/40 transition-colors duration-300"
+                data-testid={`card-testimonial-${i}`}
+              >
+                <div className="flex gap-1 mb-6">
+                  {Array.from({ length: t.stars }).map((_, s) => (
+                    <Star key={s} className="h-4 w-4 fill-accent text-accent" />
+                  ))}
+                </div>
+                <p className="text-muted-foreground leading-relaxed mb-8 flex-1 italic">"{t.quote}"</p>
+                <div className="border-t border-border pt-6">
+                  <div className="font-heading font-bold text-white">{t.name}</div>
+                  <div className="text-sm text-primary">{t.role}</div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Tech Stack */}
+      <section className="py-20 border-b border-border overflow-hidden">
+        <div className="container mx-auto px-6">
+          <motion.p
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            className="text-center text-sm font-heading tracking-widest text-muted-foreground uppercase mb-12"
+          >
+            Technologies We Work With
+          </motion.p>
+          <div className="relative">
+            <div className="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
+            <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
+            <motion.div
+              animate={{ x: ["0%", "-50%"] }}
+              transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+              className="flex gap-8 w-max"
+            >
+              {[...techStack, ...techStack].map((tech, i) => (
+                <div
+                  key={i}
+                  className="flex items-center gap-3 bg-card border border-border rounded-sm px-6 py-4 whitespace-nowrap hover:border-primary/40 transition-colors cursor-default"
+                >
+                  <div className="w-2 h-2 rounded-full bg-primary" />
+                  <span className="font-heading font-semibold text-sm text-foreground tracking-wide">{tech.name}</span>
+                </div>
+              ))}
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA */}
       <section id="cta" className="py-32 relative overflow-hidden">
-        {/* Glow effects */}
         <div className="absolute inset-0 bg-primary/5" />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[1000px] bg-gradient-to-r from-primary/20 to-accent/10 rounded-full blur-[120px] pointer-events-none" />
-        
         <div className="container mx-auto px-6 relative z-10">
           <div className="max-w-4xl mx-auto text-center border border-border/50 bg-background/50 backdrop-blur-xl p-12 md:p-20 rounded-sm shadow-2xl">
             <h2 className="font-heading text-4xl md:text-6xl font-bold text-white mb-6">Ready to Transform Your Business?</h2>
@@ -264,10 +525,10 @@ export default function Home() {
               Whether you need strategic consultancy, an AI-powered product, or a polished mobile app — let's talk about what we can build together.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90 h-14 px-10 rounded-sm font-heading tracking-widest uppercase text-sm shadow-[0_0_30px_rgba(255,167,38,0.3)]">
+              <Button size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90 h-14 px-10 rounded-sm font-heading tracking-widest uppercase text-sm shadow-[0_0_30px_rgba(255,167,38,0.3)]" data-testid="button-book-consultation">
                 Book a Free Consultation
               </Button>
-              <Button size="lg" variant="outline" className="border-primary text-primary hover:bg-primary hover:text-primary-foreground h-14 px-10 rounded-sm font-heading tracking-widest uppercase text-sm">
+              <Button size="lg" variant="outline" className="border-primary text-primary hover:bg-primary hover:text-primary-foreground h-14 px-10 rounded-sm font-heading tracking-widest uppercase text-sm" data-testid="button-view-work">
                 View Our Work
               </Button>
             </div>
@@ -280,19 +541,15 @@ export default function Home() {
         <div className="container mx-auto px-6">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
             <div className="col-span-1 md:col-span-2">
-              <img 
-                src="/salmic-logo.png" 
-                alt="Salmic Solutions" 
-                className="h-20 object-contain mix-blend-lighten contrast-125 mb-6"
-              />
+              <img src="/salmic-logo.png" alt="Salmic Solutions" className="h-20 object-contain mix-blend-lighten contrast-125 mb-6" />
               <p className="text-muted-foreground max-w-sm mb-6">
                 Strategy, AI, and mobile technology — delivered by a team that cares about your outcomes as much as you do.
               </p>
               <div className="flex gap-4 text-sm font-mono text-muted-foreground">
-                <span className="flex items-center gap-2"><Activity className="h-4 w-4 text-primary" /> Systems Nominal</span>
+                <span className="flex items-center gap-2"><Activity className="h-4 w-4 text-primary" /> Always Available</span>
               </div>
             </div>
-            
+
             <div>
               <h4 className="font-heading text-white font-bold mb-6 tracking-wide">Services</h4>
               <ul className="space-y-4 text-muted-foreground text-sm">
@@ -302,7 +559,7 @@ export default function Home() {
                 <li><a href="#services" className="hover:text-primary transition-colors">Digital Transformation</a></li>
               </ul>
             </div>
-            
+
             <div>
               <h4 className="font-heading text-white font-bold mb-6 tracking-wide">Company</h4>
               <ul className="space-y-4 text-muted-foreground text-sm">
@@ -313,7 +570,7 @@ export default function Home() {
               </ul>
             </div>
           </div>
-          
+
           <div className="border-t border-border pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-sm text-muted-foreground">
               &copy; {new Date().getFullYear()} Salmic Solutions. All rights reserved.
@@ -321,7 +578,6 @@ export default function Home() {
             <div className="flex gap-6 text-sm text-muted-foreground">
               <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
               <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
-              <a href="#" className="hover:text-white transition-colors">Security Disclosures</a>
             </div>
           </div>
         </div>
