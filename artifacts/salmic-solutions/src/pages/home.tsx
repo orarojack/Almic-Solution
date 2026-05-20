@@ -1,10 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
-import { ArrowRight, Activity, Zap, Cpu, Smartphone, Brain, ChevronRight, Users, X, Menu, Star, Search, Lightbulb, Rocket, HeartHandshake, CheckCircle2, Mail, Building2, MessageSquare } from "lucide-react";
+import { ArrowRight, Activity, Zap, Cpu, Smartphone, Brain, ChevronRight, Users, X, Menu, Star, Search, Lightbulb, Rocket, HeartHandshake, CheckCircle2, Mail, Building2, MessageSquare, Sun, Moon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { useTheme } from "@/components/ThemeProvider";
+import VirtualAssistant from "@/components/VirtualAssistant";
 
 import heroBg from "@/assets/images/hero-bg.png";
 import serviceCloud from "@/assets/images/service-cloud.png";
@@ -291,6 +293,7 @@ const testimonials = [
 export default function Home() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { theme, toggleTheme } = useTheme();
   const { scrollYProgress } = useScroll();
   const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
 
@@ -330,18 +333,36 @@ export default function Home() {
             {navLinks.map(link => (
               <a key={link.label} href={link.href} className="hover:text-primary transition-colors">{link.label}</a>
             ))}
+            <button
+              data-testid="button-theme-toggle"
+              onClick={toggleTheme}
+              aria-label="Toggle theme"
+              className="w-9 h-9 rounded-full border border-border flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary transition-all"
+            >
+              {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+            </button>
             <Button variant="outline" className="border-primary/50 text-primary hover:bg-primary hover:text-primary-foreground transition-all rounded-sm font-heading tracking-wider">
               Get a Quote <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           </div>
-          <button
-            data-testid="button-mobile-menu"
-            className="md:hidden text-foreground hover:text-primary transition-colors p-2"
-            onClick={() => setMobileOpen(true)}
-            aria-label="Open menu"
-          >
-            <Menu className="h-6 w-6" />
-          </button>
+          <div className="md:hidden flex items-center gap-2">
+            <button
+              data-testid="button-theme-toggle-mobile"
+              onClick={toggleTheme}
+              aria-label="Toggle theme"
+              className="w-9 h-9 rounded-full border border-border flex items-center justify-center text-muted-foreground hover:text-primary transition-all"
+            >
+              {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+            </button>
+            <button
+              data-testid="button-mobile-menu"
+              className="text-foreground hover:text-primary transition-colors p-2"
+              onClick={() => setMobileOpen(true)}
+              aria-label="Open menu"
+            >
+              <Menu className="h-6 w-6" />
+            </button>
+          </div>
         </div>
       </nav>
 
@@ -399,7 +420,13 @@ export default function Home() {
       {/* Hero Section */}
       <section className="relative min-h-[100dvh] flex items-center pt-20 overflow-hidden">
         <motion.div style={{ y }} className="absolute inset-0 z-0">
-          <img src={heroBg} alt="Circuit Background" className="w-full h-full object-cover opacity-30 mix-blend-screen" />
+          <img
+            src={heroBg}
+            alt="Circuit Background"
+            className={`w-full h-full object-cover transition-all duration-500 ${
+              theme === "dark" ? "opacity-30 mix-blend-screen" : "opacity-10 mix-blend-multiply"
+            }`}
+          />
           <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent" />
           <div className="absolute inset-0 bg-gradient-to-r from-background via-background/50 to-transparent" />
         </motion.div>
@@ -412,7 +439,7 @@ export default function Home() {
                 <span className="text-accent font-heading font-semibold tracking-widest text-sm uppercase">Strategy. Technology. Growth.</span>
               </motion.div>
 
-              <motion.h1 variants={fadeInUp} className="font-heading text-5xl md:text-7xl lg:text-8xl font-bold leading-[1.1] mb-8 text-white">
+              <motion.h1 variants={fadeInUp} className="font-heading text-5xl md:text-7xl lg:text-8xl font-bold leading-[1.1] mb-8 text-foreground">
                 Smart Solutions <br />
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-400">Powered by AI.</span> <br />
                 Built for You.
@@ -797,12 +824,14 @@ export default function Home() {
               &copy; {new Date().getFullYear()} Salmic Solutions. All rights reserved.
             </p>
             <div className="flex gap-6 text-sm text-muted-foreground">
-              <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
-              <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
+              <a href="#" className="hover:text-foreground transition-colors">Privacy Policy</a>
+              <a href="#" className="hover:text-foreground transition-colors">Terms of Service</a>
             </div>
           </div>
         </div>
       </footer>
+
+      <VirtualAssistant />
 
     </div>
   );
