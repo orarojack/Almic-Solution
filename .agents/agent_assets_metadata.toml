@@ -1,0 +1,26 @@
+uploads = []
+outputs = []
+
+[[generated]]
+id = "HLZXXHP1O5Zdl6saYwnYV"
+uri = "file://artifacts/salmic-solutions/src/assets/images/hero-bg.png"
+type = "image"
+title = "Hero circuit background"
+
+[[generated]]
+id = "xrVJy5UKN7Xa3xEKrrNz-"
+uri = "file://artifacts/salmic-solutions/src/assets/images/service-cloud.png"
+type = "image"
+title = "Server racks glowing cyan"
+
+[[generated]]
+id = "znWI-40Auf2tkjXy7oC_Y"
+uri = "file://artifacts/salmic-solutions/src/assets/images/service-engineering.png"
+type = "image"
+title = "Engineering schematic on metal"
+
+[[generated]]
+id = "6rBdsdH6-RrZ4dqS-n4WL"
+uri = "file://artifacts/salmic-solutions/src/assets/images/service-security.png"
+type = "image"
+title = "Cybersecurity abstract shield"
