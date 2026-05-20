@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { ArrowRight, Activity, Shield, Zap, Cpu, Network, Database, ChevronRight, Lock } from "lucide-react";
+import { ArrowRight, Activity, Shield, Zap, Cpu, Smartphone, Brain, ChevronRight, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 import heroBg from "@/assets/images/hero-bg.png";
@@ -49,15 +49,15 @@ export default function Home() {
             <img 
               src="/salmic-logo.png" 
               alt="Salmic Solutions" 
-              className="h-10 object-contain mix-blend-lighten contrast-125"
+              className="h-20 object-contain mix-blend-lighten contrast-125"
             />
           </div>
           <div className="hidden md:flex items-center gap-8 text-sm font-medium tracking-wide">
             <a href="#services" className="hover:text-primary transition-colors">Services</a>
-            <a href="#expertise" className="hover:text-primary transition-colors">Expertise</a>
-            <a href="#infrastructure" className="hover:text-primary transition-colors">Infrastructure</a>
+            <a href="#expertise" className="hover:text-primary transition-colors">Why Us</a>
+            <a href="#cta" className="hover:text-primary transition-colors">Contact</a>
             <Button variant="outline" className="border-primary/50 text-primary hover:bg-primary hover:text-primary-foreground transition-all rounded-sm font-heading tracking-wider">
-              System Status <Activity className="ml-2 h-4 w-4" />
+              Get a Quote <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           </div>
         </div>
@@ -90,26 +90,26 @@ export default function Home() {
             >
               <motion.div variants={fadeInUp} className="flex items-center gap-3 mb-6">
                 <div className="h-px w-10 bg-accent"></div>
-                <span className="text-accent font-heading font-semibold tracking-widest text-sm uppercase">Infrastructure First</span>
+                <span className="text-accent font-heading font-semibold tracking-widest text-sm uppercase">Strategy. Technology. Growth.</span>
               </motion.div>
               
               <motion.h1 variants={fadeInUp} className="font-heading text-5xl md:text-7xl lg:text-8xl font-bold leading-[1.1] mb-8 text-white">
-                Powering <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-400">Technological</span> <br />
-                Ambition.
+                Smart Solutions <br />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-400">Powered by AI.</span> <br />
+                Built for You.
               </motion.h1>
               
               <motion.p variants={fadeInUp} className="text-lg md:text-xl text-muted-foreground max-w-2xl mb-12 leading-relaxed font-light">
-                Salmic Solutions operates at the intersection of engineering precision and digital velocity. We build, scale, and secure the systems your enterprise relies on.
+                Salmic Solutions delivers expert consultancy, cutting-edge AI services, and bespoke mobile app development — helping businesses move faster, think smarter, and scale further.
               </motion.p>
               
               <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row gap-4">
                 <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 h-14 px-8 rounded-sm font-heading tracking-widest uppercase text-sm group">
-                  Deploy Solutions
+                  Start a Project
                   <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
                 </Button>
                 <Button size="lg" variant="outline" className="border-border text-foreground hover:bg-white/5 h-14 px-8 rounded-sm font-heading tracking-widest uppercase text-sm">
-                  View Architecture
+                  Explore Services
                 </Button>
               </motion.div>
             </motion.div>
@@ -125,10 +125,10 @@ export default function Home() {
         <div className="container mx-auto px-6 py-12">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-4 divide-x divide-border/0 md:divide-border/50">
             {[
-              { value: "99.999%", label: "Guaranteed Uptime" },
-              { value: "0ms", label: "Latency Tolerance" },
-              { value: "AES-256", label: "Military-Grade Encryption" },
-              { value: "24/7/365", label: "Active Monitoring" }
+              { value: "150+", label: "Projects Delivered" },
+              { value: "98%", label: "Client Satisfaction" },
+              { value: "12+", label: "Years of Expertise" },
+              { value: "24/7", label: "Ongoing Support" }
             ].map((stat, i) => (
               <motion.div 
                 key={i}
@@ -167,22 +167,22 @@ export default function Home() {
           <div className="grid md:grid-cols-3 gap-8">
             {[
               {
-                title: "Cloud Infrastructure",
-                desc: "Distributed server architectures designed for infinite scale and absolute redundancy.",
+                title: "Business Consultancy",
+                desc: "Strategic guidance to help your business identify opportunities, streamline operations, and make confident, data-driven decisions.",
                 img: serviceCloud,
-                icon: Network
+                icon: Users
               },
               {
-                title: "Systems Engineering",
-                desc: "Precision hardware and software integration for complex, mission-critical deployments.",
+                title: "AI Services",
+                desc: "Custom AI solutions — from intelligent automation and predictive analytics to LLM-powered products that give your business a real edge.",
                 img: serviceEngineering,
-                icon: Cpu
+                icon: Brain
               },
               {
-                title: "Cyber Resilience",
-                desc: "Proactive threat mitigation and deep-packet inspection protocols.",
+                title: "Mobile App Development",
+                desc: "Polished, high-performance mobile applications for iOS and Android, crafted from concept to deployment with your users in mind.",
                 img: serviceSecurity,
-                icon: Shield
+                icon: Smartphone
               }
             ].map((service, i) => (
               <motion.div
@@ -221,16 +221,16 @@ export default function Home() {
       <section id="expertise" className="py-32 bg-secondary/30 border-y border-border">
         <div className="container mx-auto px-6">
           <div className="max-w-3xl mx-auto text-center mb-20">
-            <h2 className="font-heading text-4xl md:text-5xl font-bold text-white mb-6">Built for the Critical Path</h2>
-            <p className="text-muted-foreground text-lg">We don't build toys. We architect infrastructure for organizations where downtime is measured in millions.</p>
+            <h2 className="font-heading text-4xl md:text-5xl font-bold text-white mb-6">Why Choose Salmic Solutions</h2>
+            <p className="text-muted-foreground text-lg">We partner with businesses at every stage — from early-stage startups to established enterprises — delivering solutions that are practical, scalable, and built to last.</p>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
-              { title: "Electric Speed", icon: Zap, desc: "Sub-millisecond routing and high-frequency trading level performance." },
-              { title: "Fortified Stacks", icon: Lock, desc: "Zero-trust architecture implemented at every layer of the OS model." },
-              { title: "Data Integrity", icon: Database, desc: "ACID-compliant storage arrays with multi-region instantaneous replication." },
-              { title: "Active Telemetry", icon: Activity, desc: "Granular observability via distributed tracing and anomalous behavior detection." }
+              { title: "Strategic Insight", icon: Zap, desc: "We analyse your business deeply before recommending a path, ensuring every solution aligns with your goals." },
+              { title: "AI-First Thinking", icon: Brain, desc: "Artificial intelligence is embedded into our approach — not bolted on — so you benefit from smarter outputs at every stage." },
+              { title: "End-to-End Delivery", icon: Cpu, desc: "From scoping and design through to launch and support, we stay with you for the full journey." },
+              { title: "Dedicated Support", icon: Activity, desc: "Our team is always reachable. Post-launch care, iterations, and ongoing improvements are built into our process." }
             ].map((feature, i) => (
               <motion.div
                 key={i}
@@ -252,23 +252,23 @@ export default function Home() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-32 relative overflow-hidden">
+      <section id="cta" className="py-32 relative overflow-hidden">
         {/* Glow effects */}
         <div className="absolute inset-0 bg-primary/5" />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[1000px] bg-gradient-to-r from-primary/20 to-accent/10 rounded-full blur-[120px] pointer-events-none" />
         
         <div className="container mx-auto px-6 relative z-10">
           <div className="max-w-4xl mx-auto text-center border border-border/50 bg-background/50 backdrop-blur-xl p-12 md:p-20 rounded-sm shadow-2xl">
-            <h2 className="font-heading text-4xl md:text-6xl font-bold text-white mb-6">Initialize Deployment</h2>
+            <h2 className="font-heading text-4xl md:text-6xl font-bold text-white mb-6">Ready to Transform Your Business?</h2>
             <p className="text-xl text-muted-foreground mb-10 max-w-2xl mx-auto">
-              Ready to upgrade your infrastructure? Connect with our engineering team to map out your architecture requirements.
+              Whether you need strategic consultancy, an AI-powered product, or a polished mobile app — let's talk about what we can build together.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90 h-14 px-10 rounded-sm font-heading tracking-widest uppercase text-sm shadow-[0_0_30px_rgba(255,167,38,0.3)]">
-                Start Consultation
+                Book a Free Consultation
               </Button>
               <Button size="lg" variant="outline" className="border-primary text-primary hover:bg-primary hover:text-primary-foreground h-14 px-10 rounded-sm font-heading tracking-widest uppercase text-sm">
-                Request Documentation
+                View Our Work
               </Button>
             </div>
           </div>
@@ -283,10 +283,10 @@ export default function Home() {
               <img 
                 src="/salmic-logo.png" 
                 alt="Salmic Solutions" 
-                className="h-12 object-contain mix-blend-lighten contrast-125 mb-6"
+                className="h-20 object-contain mix-blend-lighten contrast-125 mb-6"
               />
               <p className="text-muted-foreground max-w-sm mb-6">
-                Operating at the intersection of engineering precision and technological ambition. We power the infrastructure of tomorrow.
+                Strategy, AI, and mobile technology — delivered by a team that cares about your outcomes as much as you do.
               </p>
               <div className="flex gap-4 text-sm font-mono text-muted-foreground">
                 <span className="flex items-center gap-2"><Activity className="h-4 w-4 text-primary" /> Systems Nominal</span>
@@ -294,12 +294,12 @@ export default function Home() {
             </div>
             
             <div>
-              <h4 className="font-heading text-white font-bold mb-6 tracking-wide">Infrastructure</h4>
+              <h4 className="font-heading text-white font-bold mb-6 tracking-wide">Services</h4>
               <ul className="space-y-4 text-muted-foreground text-sm">
-                <li><a href="#" className="hover:text-primary transition-colors">Cloud Architecture</a></li>
-                <li><a href="#" className="hover:text-primary transition-colors">Network Engineering</a></li>
-                <li><a href="#" className="hover:text-primary transition-colors">Cybersecurity Protocols</a></li>
-                <li><a href="#" className="hover:text-primary transition-colors">Data Centers</a></li>
+                <li><a href="#services" className="hover:text-primary transition-colors">Business Consultancy</a></li>
+                <li><a href="#services" className="hover:text-primary transition-colors">AI Services</a></li>
+                <li><a href="#services" className="hover:text-primary transition-colors">Mobile App Development</a></li>
+                <li><a href="#services" className="hover:text-primary transition-colors">Digital Transformation</a></li>
               </ul>
             </div>
             
@@ -307,9 +307,9 @@ export default function Home() {
               <h4 className="font-heading text-white font-bold mb-6 tracking-wide">Company</h4>
               <ul className="space-y-4 text-muted-foreground text-sm">
                 <li><a href="#" className="hover:text-primary transition-colors">About Us</a></li>
-                <li><a href="#" className="hover:text-primary transition-colors">Engineering Blog</a></li>
+                <li><a href="#" className="hover:text-primary transition-colors">Case Studies</a></li>
                 <li><a href="#" className="hover:text-primary transition-colors">Careers</a></li>
-                <li><a href="#" className="hover:text-primary transition-colors">System Status</a></li>
+                <li><a href="#cta" className="hover:text-primary transition-colors">Contact Us</a></li>
               </ul>
             </div>
           </div>
