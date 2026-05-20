@@ -1,7 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
-import { ArrowRight, Activity, Zap, Cpu, Smartphone, Brain, ChevronRight, Users, X, Menu, Star, Search, Lightbulb, Rocket, HeartHandshake } from "lucide-react";
+import { ArrowRight, Activity, Zap, Cpu, Smartphone, Brain, ChevronRight, Users, X, Menu, Star, Search, Lightbulb, Rocket, HeartHandshake, CheckCircle2, Mail, Building2, MessageSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
 
 import heroBg from "@/assets/images/hero-bg.png";
 import serviceCloud from "@/assets/images/service-cloud.png";
@@ -73,6 +76,174 @@ function StatItem({ stat, index }: { stat: typeof stats[0]; index: number }) {
       </div>
       <div className="text-sm text-primary tracking-wider uppercase font-medium">{stat.label}</div>
     </motion.div>
+  );
+}
+
+function ContactForm() {
+  const [form, setForm] = useState({ name: "", email: "", company: "", service: "", message: "" });
+  const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
+  const [error, setError] = useState("");
+
+  const services = [
+    "Business Consultancy",
+    "AI Services",
+    "Mobile App Development",
+    "Digital Transformation",
+    "Other",
+  ];
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (!form.name || !form.email || !form.service || !form.message) return;
+    setStatus("submitting");
+    setError("");
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      if (!res.ok) throw new Error("Failed");
+      setStatus("success");
+    } catch {
+      setStatus("error");
+      setError("Something went wrong. Please try again or email us directly.");
+    }
+  }
+
+  if (status === "success") {
+    return (
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        className="border border-primary/30 bg-primary/5 rounded-sm p-12 text-center"
+      >
+        <div className="h-16 w-16 bg-primary/10 border border-primary/30 rounded-full flex items-center justify-center mx-auto mb-6">
+          <CheckCircle2 className="h-8 w-8 text-primary" />
+        </div>
+        <h3 className="font-heading text-2xl font-bold text-white mb-3">Message Received</h3>
+        <p className="text-muted-foreground mb-8">
+          Thank you, <span className="text-white font-medium">{form.name}</span>. We'll be in touch within one business day.
+        </p>
+        <Button
+          variant="outline"
+          className="border-primary/40 text-primary hover:bg-primary hover:text-primary-foreground rounded-sm font-heading tracking-widest uppercase text-sm"
+          onClick={() => { setStatus("idle"); setForm({ name: "", email: "", company: "", service: "", message: "" }); }}
+        >
+          Send Another Message
+        </Button>
+      </motion.div>
+    );
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="border border-border bg-card/50 backdrop-blur rounded-sm p-8 space-y-6">
+      <div className="grid grid-cols-2 gap-4">
+        <div className="space-y-2">
+          <Label htmlFor="name" className="text-sm font-heading tracking-wide text-muted-foreground uppercase">
+            Full Name <span className="text-accent">*</span>
+          </Label>
+          <Input
+            id="name"
+            data-testid="input-name"
+            placeholder="Jane Smith"
+            value={form.name}
+            onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
+            required
+            className="bg-background/50 border-border focus:border-primary rounded-sm h-12"
+          />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="email" className="text-sm font-heading tracking-wide text-muted-foreground uppercase">
+            Email <span className="text-accent">*</span>
+          </Label>
+          <Input
+            id="email"
+            type="email"
+            data-testid="input-email"
+            placeholder="jane@company.com"
+            value={form.email}
+            onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
+            required
+            className="bg-background/50 border-border focus:border-primary rounded-sm h-12"
+          />
+        </div>
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="company" className="text-sm font-heading tracking-wide text-muted-foreground uppercase flex items-center gap-2">
+          <Building2 className="h-3.5 w-3.5" /> Company
+        </Label>
+        <Input
+          id="company"
+          data-testid="input-company"
+          placeholder="Your company name (optional)"
+          value={form.company}
+          onChange={e => setForm(f => ({ ...f, company: e.target.value }))}
+          className="bg-background/50 border-border focus:border-primary rounded-sm h-12"
+        />
+      </div>
+
+      <div className="space-y-2">
+        <Label className="text-sm font-heading tracking-wide text-muted-foreground uppercase">
+          Service Interested In <span className="text-accent">*</span>
+        </Label>
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+          {services.map(s => (
+            <button
+              key={s}
+              type="button"
+              data-testid={`button-service-${s.toLowerCase().replace(/\s+/g, "-")}`}
+              onClick={() => setForm(f => ({ ...f, service: s }))}
+              className={`text-xs font-heading tracking-wide px-3 py-2.5 rounded-sm border transition-all duration-200 text-left ${
+                form.service === s
+                  ? "border-primary bg-primary/10 text-primary"
+                  : "border-border bg-background/30 text-muted-foreground hover:border-primary/40"
+              }`}
+            >
+              {s}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="message" className="text-sm font-heading tracking-wide text-muted-foreground uppercase flex items-center gap-2">
+          <MessageSquare className="h-3.5 w-3.5" /> Message <span className="text-accent">*</span>
+        </Label>
+        <Textarea
+          id="message"
+          data-testid="input-message"
+          placeholder="Tell us about your project, goals, or challenges..."
+          value={form.message}
+          onChange={e => setForm(f => ({ ...f, message: e.target.value }))}
+          required
+          rows={5}
+          className="bg-background/50 border-border focus:border-primary rounded-sm resize-none"
+        />
+      </div>
+
+      {error && (
+        <p className="text-sm text-red-400 bg-red-400/10 border border-red-400/20 rounded-sm px-4 py-3">{error}</p>
+      )}
+
+      <Button
+        type="submit"
+        size="lg"
+        disabled={status === "submitting"}
+        data-testid="button-submit-contact"
+        className="w-full bg-accent text-accent-foreground hover:bg-accent/90 h-14 rounded-sm font-heading tracking-widest uppercase text-sm shadow-[0_0_30px_rgba(255,167,38,0.2)] disabled:opacity-60"
+      >
+        {status === "submitting" ? (
+          <span className="flex items-center gap-2">
+            <span className="h-4 w-4 border-2 border-accent-foreground/30 border-t-accent-foreground rounded-full animate-spin" />
+            Sending...
+          </span>
+        ) : (
+          <>Send Message <ArrowRight className="ml-2 h-4 w-4" /></>
+        )}
+      </Button>
+    </form>
   );
 }
 
@@ -514,24 +685,74 @@ export default function Home() {
         </div>
       </section>
 
-      {/* CTA */}
+      {/* Contact Form */}
       <section id="cta" className="py-32 relative overflow-hidden">
         <div className="absolute inset-0 bg-primary/5" />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[1000px] bg-gradient-to-r from-primary/20 to-accent/10 rounded-full blur-[120px] pointer-events-none" />
+
         <div className="container mx-auto px-6 relative z-10">
-          <div className="max-w-4xl mx-auto text-center border border-border/50 bg-background/50 backdrop-blur-xl p-12 md:p-20 rounded-sm shadow-2xl">
-            <h2 className="font-heading text-4xl md:text-6xl font-bold text-white mb-6">Ready to Transform Your Business?</h2>
-            <p className="text-xl text-muted-foreground mb-10 max-w-2xl mx-auto">
-              Whether you need strategic consultancy, an AI-powered product, or a polished mobile app — let's talk about what we can build together.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90 h-14 px-10 rounded-sm font-heading tracking-widest uppercase text-sm shadow-[0_0_30px_rgba(255,167,38,0.3)]" data-testid="button-book-consultation">
-                Book a Free Consultation
-              </Button>
-              <Button size="lg" variant="outline" className="border-primary text-primary hover:bg-primary hover:text-primary-foreground h-14 px-10 rounded-sm font-heading tracking-widest uppercase text-sm" data-testid="button-view-work">
-                View Our Work
-              </Button>
-            </div>
+          <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-16 items-start">
+
+            {/* Left — info panel */}
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+            >
+              <div className="flex items-center gap-3 mb-6">
+                <div className="h-px w-10 bg-accent" />
+                <span className="text-accent font-heading font-semibold tracking-widest text-sm uppercase">Get in Touch</span>
+              </div>
+              <h2 className="font-heading text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">
+                Let's Build Something <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-400">Great Together</span>
+              </h2>
+              <p className="text-muted-foreground text-lg mb-10 leading-relaxed">
+                Whether you need strategic advice, an AI-powered product, or a polished mobile app — tell us about your project and we'll come back to you within one business day.
+              </p>
+
+              <div className="space-y-6">
+                {[
+                  { icon: CheckCircle2, text: "Free initial consultation, no strings attached" },
+                  { icon: CheckCircle2, text: "Response within 1 business day" },
+                  { icon: CheckCircle2, text: "Tailored proposal based on your specific needs" },
+                  { icon: CheckCircle2, text: "Fixed-price or flexible engagement models" },
+                ].map((item, i) => (
+                  <motion.div
+                    key={i}
+                    initial={{ opacity: 0, x: -20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: i * 0.1 + 0.3 }}
+                    className="flex items-start gap-3"
+                  >
+                    <item.icon className="h-5 w-5 text-accent flex-shrink-0 mt-0.5" />
+                    <span className="text-muted-foreground">{item.text}</span>
+                  </motion.div>
+                ))}
+              </div>
+
+              <div className="mt-12 p-6 border border-primary/20 bg-primary/5 rounded-sm">
+                <div className="flex items-center gap-3 mb-2">
+                  <Mail className="h-5 w-5 text-primary" />
+                  <span className="font-heading font-bold text-white text-sm tracking-wide">Email Us Directly</span>
+                </div>
+                <a href="mailto:hello@salmicsolutions.com" className="text-primary hover:text-primary/80 transition-colors">
+                  hello@salmicsolutions.com
+                </a>
+              </div>
+            </motion.div>
+
+            {/* Right — form */}
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+            >
+              <ContactForm />
+            </motion.div>
+
           </div>
         </div>
       </section>
