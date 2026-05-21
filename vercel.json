@@ -1,5 +1,5 @@
 {
-  "installCommand": "pnpm install",
+  "installCommand": "pnpm install --filter @workspace/salmic-solutions...",
   "buildCommand": "pnpm --filter @workspace/salmic-solutions run build",
   "outputDirectory": "artifacts/salmic-solutions/dist/public",
   "framework": "vite",
