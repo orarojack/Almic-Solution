@@ -1,7 +1,7 @@
 {
-  "installCommand": "pnpm install --filter @workspace/salmic-solutions...",
-  "buildCommand": "pnpm --filter @workspace/salmic-solutions run build",
+  "installCommand": "cd artifacts/salmic-solutions && npm install --legacy-peer-deps",
+  "buildCommand": "cd artifacts/salmic-solutions && npm run build",
   "outputDirectory": "artifacts/salmic-solutions/dist/public",
-  "framework": "vite",
+  "framework": null,
   "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
 }
