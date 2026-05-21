@@ -24,7 +24,7 @@ const QA: Record<string, string> = {
   "Do you offer post-launch support?":
     "Yes — we don't disappear after launch. We offer ongoing support packages covering:\n\n• Bug fixes and performance optimisation\n• Feature iterations and updates\n• 24/7 monitoring for critical systems\n\nOur team stays close so your product keeps improving.",
   "Where are you based?":
-    "Salmic Solutions operates remotely with a globally distributed team, allowing us to serve clients worldwide. We're comfortable working across time zones and can accommodate your preferred communication style — async or real-time.",
+    "Almic Solutions operates remotely with a globally distributed team, allowing us to serve clients worldwide. We're comfortable working across time zones and can accommodate your preferred communication style — async or real-time.",
 };
 
 const suggestions = Object.keys(QA);
@@ -47,7 +47,7 @@ export default function VirtualAssistant() {
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "assistant",
-      text: "Hi! I'm the Salmic Solutions virtual assistant. Choose a question below or ask me anything about our services.",
+      text: "Hi! I'm the Almic Solutions virtual assistant. Choose a question below or ask me anything about our services.",
     },
   ]);
   const [asked, setAsked] = useState<Set<string>>(new Set());
@@ -72,7 +72,7 @@ export default function VirtualAssistant() {
     setMessages([
       {
         role: "assistant",
-        text: "Hi! I'm the Salmic Solutions virtual assistant. Choose a question below or ask me anything about our services.",
+        text: "Hi! I'm the Almic Solutions virtual assistant. Choose a question below or ask me anything about our services.",
       },
     ]);
     setAsked(new Set());
@@ -121,7 +121,7 @@ export default function VirtualAssistant() {
                   <MessageCircle className="h-4 w-4" />
                 </div>
                 <div>
-                  <p className="font-heading font-bold text-sm tracking-wide">Salmic Assistant</p>
+                  <p className="font-heading font-bold text-sm tracking-wide">Almic Assistant</p>
                   <p className="text-xs opacity-75 flex items-center gap-1">
                     <span className="w-1.5 h-1.5 rounded-full bg-green-300 inline-block" />
                     Online now

@@ -18,7 +18,7 @@ export function useTheme() {
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setTheme] = useState<Theme>(() => {
-    const stored = localStorage.getItem("salmic-theme");
+    const stored = localStorage.getItem("almic-theme");
     if (stored === "light" || stored === "dark") return stored;
     return "dark";
   });
@@ -30,7 +30,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     } else {
       root.classList.remove("dark");
     }
-    localStorage.setItem("salmic-theme", theme);
+    localStorage.setItem("almic-theme", theme);
   }, [theme]);
 
   function toggleTheme() {

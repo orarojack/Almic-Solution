@@ -271,7 +271,7 @@ const processSteps = [
 
 const testimonials = [
   {
-    quote: "Salmic Solutions transformed how we use data. Their AI consultancy work gave us insights we hadn't imagined possible, and the implementation was seamless.",
+    quote: "Almic Solutions transformed how we use data. Their AI consultancy work gave us insights we hadn't imagined possible, and the implementation was seamless.",
     name: "Rachel O.",
     role: "Head of Operations, FinServ Group",
     stars: 5,
@@ -325,8 +325,8 @@ export default function Home() {
       }`}>
         <div className="container mx-auto px-6 flex items-center justify-between">
           <img
-            src="/salmic-logo.png"
-            alt="Salmic Solutions"
+            src="/almic-logo.png"
+            alt="Almic Solutions"
             className="h-20 object-contain mix-blend-lighten contrast-125"
           />
           <div className="hidden md:flex items-center gap-8 text-sm font-medium tracking-wide">
@@ -385,7 +385,7 @@ export default function Home() {
               className="fixed top-0 right-0 bottom-0 w-72 bg-card border-l border-border z-50 flex flex-col p-8"
             >
               <div className="flex justify-between items-center mb-10">
-                <img src="/salmic-logo.png" alt="Salmic Solutions" className="h-12 object-contain mix-blend-lighten contrast-125" />
+                <img src="/almic-logo.png" alt="Almic Solutions" className="h-12 object-contain mix-blend-lighten contrast-125" />
                 <button
                   data-testid="button-close-menu"
                   onClick={() => setMobileOpen(false)}
@@ -446,7 +446,7 @@ export default function Home() {
               </motion.h1>
 
               <motion.p variants={fadeInUp} className="text-lg md:text-xl text-muted-foreground max-w-2xl mb-12 leading-relaxed font-light">
-                Salmic Solutions delivers expert consultancy, cutting-edge AI services, and bespoke mobile app development — helping businesses move faster, think smarter, and scale further.
+                Almic Solutions delivers expert consultancy, cutting-edge AI services, and bespoke mobile app development — helping businesses move faster, think smarter, and scale further.
               </motion.p>
 
               <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row gap-4">
@@ -598,7 +598,7 @@ export default function Home() {
       <section id="expertise" className="py-32">
         <div className="container mx-auto px-6">
           <div className="max-w-3xl mx-auto text-center mb-20">
-            <h2 className="font-heading text-4xl md:text-5xl font-bold text-white mb-6">Why Choose Salmic Solutions</h2>
+            <h2 className="font-heading text-4xl md:text-5xl font-bold text-white mb-6">Why Choose Almic Solutions</h2>
             <p className="text-muted-foreground text-lg">We partner with businesses at every stage — from early-stage startups to established enterprises — delivering solutions that are practical, scalable, and built to last.</p>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -764,8 +764,8 @@ export default function Home() {
                   <Mail className="h-5 w-5 text-primary" />
                   <span className="font-heading font-bold text-white text-sm tracking-wide">Email Us Directly</span>
                 </div>
-                <a href="mailto:hello@salmicsolutions.com" className="text-primary hover:text-primary/80 transition-colors">
-                  hello@salmicsolutions.com
+                <a href="mailto:hello@almicsolutions.com" className="text-primary hover:text-primary/80 transition-colors">
+                  hello@almicsolutions.com
                 </a>
               </div>
             </motion.div>
@@ -789,7 +789,7 @@ export default function Home() {
         <div className="container mx-auto px-6">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
             <div className="col-span-1 md:col-span-2">
-              <img src="/salmic-logo.png" alt="Salmic Solutions" className="h-20 object-contain mix-blend-lighten contrast-125 mb-6" />
+              <img src="/almic-logo.png" alt="Almic Solutions" className="h-20 object-contain mix-blend-lighten contrast-125 mb-6" />
               <p className="text-muted-foreground max-w-sm mb-6">
                 Strategy, AI, and mobile technology — delivered by a team that cares about your outcomes as much as you do.
               </p>
@@ -821,7 +821,7 @@ export default function Home() {
 
           <div className="border-t border-border pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-sm text-muted-foreground">
-              &copy; {new Date().getFullYear()} Salmic Solutions. All rights reserved.
+              &copy; {new Date().getFullYear()} Almic Solutions. All rights reserved.
             </p>
             <div className="flex gap-6 text-sm text-muted-foreground">
               <a href="#" className="hover:text-foreground transition-colors">Privacy Policy</a>

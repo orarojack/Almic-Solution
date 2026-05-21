@@ -1,6 +1,6 @@
 kind = "web"
 previewPath = "/"
-title = "Salmic Solutions"
+title = "Almic Solutions"
 version = "1.0.0"
 id = "artifacts/salmic-solutions"
 router = "path"
